@@ -812,7 +812,10 @@ num.unique.allele<-function(x){
 	length(unique(xx))
 }
 
-malaria.em <- function(geno, sizes=c(2), locus.label=NA){
+malaria.em <- function(geno=NULL, sizes=c(2), locus.label=NA){
+	if(is.null(geno)){
+		stop("Please input the genotype data!")
+	}
 	if(length(sizes)<1){
 		stop("Sizes information is incorrect! Length of sizes should be at least 1"); 
 	}
@@ -925,10 +928,13 @@ malaria.em <- function(geno, sizes=c(2), locus.label=NA){
 	
 	if(is.na(locus.label)[1]){
 	colnames(haplo.prob.tab)<-c(paste("loc-", rep(1:length(allHaplotypes[[1]])),sep=""),"hap.prob","hap.prob.std")
+		colnames(haplotype)<-paste("loc-", rep(1:length(allHaplotypes[[1]])),sep="")
 	}else{
 			colnames(haplo.prob.tab)<-c(locus.label, "hap.prob","hap.prob.std")
-
+		colnames(haplotype)<-locus.label
 	}
+	rownames(haplo.prob.tab)<-c(1:nrow(haplo.prob.tab))
+
 
 	est <- list(haplo.prob.tab=haplo.prob.tab,haplotype=haplotype, haplo.prob=as.vector(allEstiPs), 
 			haplo.prob.std=p.std[1:length(allHaplotypes)],lambda=EstiLambda,lambda.std=lambda.std,
@@ -939,11 +945,20 @@ malaria.em <- function(geno, sizes=c(2), locus.label=NA){
 }
 
 print.malaria.em<-function(x,...){
-	cat("Frenquency Estimate:\n")
+	cat("Frequency Estimate:\n")
 	cat("======================================================================:\n")
-	print(x$haplo.prob.tab)
+	print(x$haplo.prob.tab,quote=F)
 	cat("======================================================================:\n")
+	
 	cat("Estimated Mean Number of Infections:\n")
 	print(x$NumofInfection)
+
+	if(!is.na(x$lambda)){
+		tab<-cbind(x$lambda, x$lambda.std)
+		colnames(tab)<-c("Estimate", "std.")
+		rownames(tab)<-"Lambda"
+		cat("Estimated Poisson Parameter Lambda:\n")
+		print(tab, quote=F)
+	}
 }
 

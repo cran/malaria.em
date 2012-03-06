@@ -97,14 +97,13 @@ Li, X., Foulkes, A.S., Yucel, R. and Rich, S.M. (2007) An expectation maximizati
 Xiaohong Li
 }
 \examples{
-#geno is a subset of the example data hla.demo from haplo.stats package
 data(geno)
 
 sizes<-c(2)
-ret1<-malaria.em(geno,sizes,locus.label=c("A","B") )
+ret1<-malaria.em(geno,sizes,locus.label=c("DQB","DRB") )
 
 sizes<-c(1:3)
-ret2<-malaria.em(geno,sizes,locus.label=c("A","B") )
+ret2<-malaria.em(geno,sizes,locus.label=c("DQB","DRB") )
 
 }
 \keyword{ ~kwd1 }
